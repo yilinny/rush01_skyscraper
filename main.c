@@ -6,7 +6,8 @@ int read_from_marker(char *p, int *arr);
 void print_grid(int *str);
 int *four_markers(int *marker, int *final_grid);
 int *one_markers(int *marker, int *final_grid);
-int *sudoku_digit(int digit, int *final_grid);
+int *three_markers(int *marker, int *final_grid);
+void sudoku_digit(int digit, int *final_grid);
 
 int *init_grid(int *arr)
 {
@@ -69,9 +70,10 @@ int main(int argc, char *argv[])
     extract_markers(argv[1], markers);
     four_markers(markers, final_grid);
     one_markers(markers, final_grid);
-    sudoku_digit(4, final_grid); 
     print_grid(final_grid);
-
+    three_markers(markers, final_grid);
+    sudoku_digit(3, final_grid);
+    print_grid(final_grid);
     return (0);
 }
 

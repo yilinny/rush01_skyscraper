@@ -126,31 +126,21 @@ int *mark_possibilities(int digit, int *buffer, int *final_grid)
             if (final_grid[pointer] == digit)
             {
                 mark_row_column(pointer, buffer);
-                row++;
-                col = 1;
             }
-            else
-            {
-                col++;
-            }
+            col++;
         }
         row++;
     }
     return (buffer);
 }
 
-// sudoku each row to fill in a specific digit
-int *sudoku_digit(int digit, int *final_grid)
+int *scan_and_fill(int digit, int *buffer, int *final_grid)
 {
     int row;
     int col;
-    int pos; // possibilities
     int index;
     int target_col;
-    int buffer[16]; // holds possibility. if it can be the digit, hold 0, else hold 1
-
-    init_grid(buffer);
-    mark_possibilities(digit, buffer, final_grid);
+    int pos;
 
     row = 1;
     col = 1;
@@ -178,11 +168,26 @@ int *sudoku_digit(int digit, int *final_grid)
     return (final_grid);
 }
 
+// sudoku each row to fill in a specific digit
+void sudoku_digit(int digit, int *final_grid)
+{
+    int buffer[16]; // holds possibility. if it can be the digit, hold 0, else hold 1
+
+    init_grid(buffer);
+    mark_possibilities(digit, buffer, final_grid);
+    scan_and_fill(digit, buffer, final_grid);
+    printf("end of sudoku digits\n");
+    fflush(stdout);
+}
+
 int *three_markers(int *marker, int *final_grid)
 {
     int four_poss[16];
+    int three_poss[16];
     init_grid(four_poss);
-    mark_possibilities(four_poss);
+    init_grid(three_poss);
+    mark_possibilities(4, four_poss, final_grid);
+    mark_possibilities(3, three_poss, final_grid);
 
     int row;
     int col;
@@ -209,9 +214,13 @@ int *three_markers(int *marker, int *final_grid)
             }
             pos = ((row - 1) * 4 + (col - 1));
             four_poss[pos] = 1;
+            three_poss[pos] = 1;
         }
         index++;
     }
+    scan_and_fill(4, four_poss, final_grid);
+    scan_and_fill(3, three_poss, final_grid);
+    return (final_grid);
 }
 
 // consider a separate function to loop across marker with a function as a parameter
