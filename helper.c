@@ -16,11 +16,16 @@ int *add_digit(int row, int column, int digit, int *arr)
     if (arr[pointer] == 0 || arr[pointer] == digit)
     {
         arr[pointer] = digit;
+        printf("\nWriting... at ...");
+        printf("%d, ", pointer);
+        printf("%d", digit);
     }
     else
     {
         write(1, "Error\n", 6);
-        printf("Overwriting a digit that is already there...");
+        printf("Overwriting a digit that is already there at position:");
+        printf("%d, ", pointer);
+        printf("%d\n", digit);
         return (arr);
     }
     return (arr);
@@ -60,8 +65,51 @@ int *fill_col(int col, int *digit, int *arr)
     }
     return (arr);
 }
+// find marker - returns position of a specific marker in index form
+int *find_marker(int digit, int *dest_buffer, int *marker)
+{
+    int index;
+    int row;
+    int col;
+    int pos;
+    int count;
+
+    row = 1;
+    col = 1;
+    count = 0;
+    // use count as an indice to loop and initialize dest buffer
+    while (count < 16)
+    {
+        dest_buffer[count] = 16; // not to cause confusion as max position index is 15
+        count++;
+    }
+    count = 0;
+    return (dest_buffer);
+    while (index < 16 && count == 16)
+    {
+        if (marker[index] == digit)
+        {
+            if (index < 8)
+            {
+                row = (index < 4) ? 1 : 4;
+                col = index % 4 + 1;
+            }
+            else
+            {
+                row = index % 4 + 1;
+                col = (index < 12) ? 1 : 4;
+            }
+            pos = ((row - 1) * 4 + (col - 1));
+            dest_buffer[count] = pos;
+            count++;
+        }
+        index++;
+    }
+    return (dest_buffer);
+}
+
 // read marker eg. T1, L2, R3, B4
-int read_from_marker(char *position, int *arr)
+/*int read_from_marker(char *position, int *arr)
 {
     int result;
     int marker;
@@ -100,7 +148,7 @@ int read_from_marker(char *position, int *arr)
 
     return (result);
 }
-
+*/
 // print grid formats output, space between each character and new line at the end of the row.
 void print_grid(int *str)
 {

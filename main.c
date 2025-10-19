@@ -2,12 +2,12 @@
 #include <unistd.h>
 
 int *add_digit(int r, int c, int d, int *arr);
-int read_from_marker(char *p, int *arr);
 void print_grid(int *str);
 int *four_markers(int *marker, int *final_grid);
 int *one_markers(int *marker, int *final_grid);
-int *three_markers(int *marker, int *final_grid);
 void sudoku_digit(int digit, int *final_grid);
+void init_possibilities(int possibilities[4][4][4]);
+void recursive_fill(int possibilities[4][4][4], int *final_grid, int *marker);
 
 int *init_grid(int *arr)
 {
@@ -60,6 +60,8 @@ int main(int argc, char *argv[])
 {
     int final_grid[16];
     int markers[16];
+    int possibilities[4][4][4];
+    init_possibilities(possibilities);
 
     if (argc != 2 || !argv)
     {
@@ -70,9 +72,7 @@ int main(int argc, char *argv[])
     extract_markers(argv[1], markers);
     four_markers(markers, final_grid);
     one_markers(markers, final_grid);
-    print_grid(final_grid);
-    three_markers(markers, final_grid);
-    sudoku_digit(3, final_grid);
+    recursive_fill(possibilities, final_grid, markers);
     print_grid(final_grid);
     return (0);
 }
